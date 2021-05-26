@@ -25,7 +25,7 @@ func (s *LBD) EncodePayload(key string, payload string) {
 
 	//Build hexLocation map for the key file
 	for counter, fileByte := range keyFile {
-		if len(hexLocation) == 255 {
+		if len(hexLocation) == 256 {
 			fmt.Println("[*] Done building location hex map..")
 			break
 		} else {
@@ -37,7 +37,7 @@ func (s *LBD) EncodePayload(key string, payload string) {
 	}
 
 	//Check if all 255 bytes are present in the map, if not error out and close
-	if len(hexLocation) < 255 {
+	if len(hexLocation) < 256 {
 		fmt.Println("[*] Cound not complete location hex map, some bytes are misisng from the key file!")
 		os.Exit(1)
 	}
