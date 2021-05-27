@@ -1,5 +1,5 @@
 # Shellcode-Loader-ByteMap
-> 1. Encode your shellcode. 2. Run your encoded shellcode and bypass AV.
+> Encodes and runs shellcode payloads. Use it to bypass AV's.
 
 
 The tool has two functionalities:
