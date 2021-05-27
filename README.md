@@ -8,7 +8,7 @@ The tool has two functionalities:
 
 Should support all Windows versions, as long as you compile the project with the correct architecture.
 
-## Installation
+## Build
 
 Windows for 32bit payloads:
 
