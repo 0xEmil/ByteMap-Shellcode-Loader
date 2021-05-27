@@ -2,6 +2,8 @@ package pkg
 
 import (
 	"bufio"
+	"bytes"
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -10,10 +12,7 @@ import (
 	"strings"
 )
 
-type LBD struct {
-}
-
-func (s *LBD) EncodePayload(key string, payload string) {
+func EncodePayload(key string, payloadname string, payload string) {
 	//Define Hex location map variable
 	hexLocation := make(map[byte]string)
 
@@ -42,14 +41,18 @@ func (s *LBD) EncodePayload(key string, payload string) {
 		os.Exit(1)
 	}
 
-	//Read payload file contents
 	payloadFile, err := ioutil.ReadFile(payload)
-	if err != nil {
-		log.Fatal(err)
+	if os.IsNotExist(err) {
+		//If not file, try to load the string as hex payload
+		payloadFile, err = hex.DecodeString(payload)
+		if err != nil {
+			fmt.Printf("Error decoding arg 1: %s\n", err)
+			os.Exit(1)
+		}
 	}
 
-	//Open the payload.txt file on disk
-	file, err := os.OpenFile("payload.encoded", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	//Open the encoded payload file on disk
+	file, err := os.OpenFile(payloadname, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		log.Fatal("Failed to create payload file")
 	}
@@ -66,7 +69,7 @@ func (s *LBD) EncodePayload(key string, payload string) {
 	file.Close()
 }
 
-func (s *LBD) DecodePayload(key string, encodedPayload string) {
+func DecodePayload(key string, encodedPayload string) bytes.Buffer {
 
 	//Read key file contents
 	keyFile, err := ioutil.ReadFile(key)
@@ -83,22 +86,14 @@ func (s *LBD) DecodePayload(key string, encodedPayload string) {
 	//Remove the last "," and split the data by ","
 	textData := strings.Split(strings.TrimSuffix(string(encodedPayloadFile), ","), ",")
 
-	//Open handler to payload.exe file on disk.
-	file, err := os.OpenFile("payload.exe", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		log.Fatal("[*] Failed to create payload file.")
-		os.Exit(1)
-	}
-
-	//Create writer interface
-	writer := bufio.NewWriter(file)
+	var shellcode bytes.Buffer
 
 	//Write the decoded payload to disk
 	for _, fileByte := range textData {
 		i, _ := strconv.Atoi(fileByte)
-		writer.WriteByte(keyFile[i])
+		shellcode.WriteByte(keyFile[i])
 	}
 
-	writer.Flush()
-	file.Close()
+	return shellcode
+
 }
