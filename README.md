@@ -41,8 +41,6 @@ Run the encoded payload:
 loader64.exe decode-run ./loader64.exe encodedPayloadFileName.enc
 ```
 
-Full process GIF:
-
 
 ## Info
 
