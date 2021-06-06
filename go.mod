@@ -1,4 +1,4 @@
-module github.com/0xEmil/LBD
+module github.com/0xEmil/Shellcode-Loader-ByteMap
 
 go 1.16
 
