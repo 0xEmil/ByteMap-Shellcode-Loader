@@ -12,17 +12,19 @@ import (
 	"strings"
 )
 
+// Hideous code, but it runs. Created for a how-to YouTube video.
+
 func EncodePayload(key string, payloadname string, payload string) {
-	//Define Hex location map variable
+	// Define Hex location map variable
 	hexLocation := make(map[byte]string)
 
-	//Read key file contents
+	// Read key file contents
 	keyFile, err := ioutil.ReadFile(key)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//Build hexLocation map for the key file
+	// Build hexLocation map for the key file
 	for counter, fileByte := range keyFile {
 		if len(hexLocation) == 256 {
 			fmt.Println("[*] Done building location hex map.")
@@ -35,15 +37,16 @@ func EncodePayload(key string, payloadname string, payload string) {
 		}
 	}
 
-	//Check if all 256 bytes are present in the map, if not error out and close
+	// Check if all 256 bytes are present in the map, if not error out and close
 	if len(hexLocation) < 256 {
+		// I can implement a check to see which bytes, but I am lazy.
 		fmt.Println("[*] Cound not complete location hex map, some bytes are misisng from the key file!")
 		os.Exit(1)
 	}
 
 	payloadFile, err := ioutil.ReadFile(payload)
 	if os.IsNotExist(err) {
-		//If not file, try to load the string as hex payload
+		// If not a file, try to load the string as hex payload
 		payloadFile, err = hex.DecodeString(payload)
 		if err != nil {
 			fmt.Printf("Error decoding arg 1: %s\n", err)
@@ -51,16 +54,16 @@ func EncodePayload(key string, payloadname string, payload string) {
 		}
 	}
 
-	//Open the encoded payload file on disk
+	// Open the encoded payload file on disk
 	file, err := os.OpenFile(payloadname, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		log.Fatal("Failed to create payload file")
 	}
 
-	//Create writer interface
+	// Create writer interface
 	writer := bufio.NewWriter(file)
 
-	//For byte in payload file, write the location of the byte in the key file
+	// For every byte in payload file, write the location of the byte in the key file
 	for _, fileByte := range payloadFile {
 		_, _ = writer.WriteString(hexLocation[fileByte] + ",")
 	}
@@ -71,24 +74,24 @@ func EncodePayload(key string, payloadname string, payload string) {
 
 func DecodePayload(key string, encodedPayload string) bytes.Buffer {
 
-	//Read key file contents
+	// Read key file contents
 	keyFile, err := ioutil.ReadFile(key)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//Read encoded payload file contents
+	// Read encoded payload file contents
 	encodedPayloadFile, err := ioutil.ReadFile(encodedPayload)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//Remove the last "," and split the data by ","
+	// Remove the last "," and split the data by ","
 	textData := strings.Split(strings.TrimSuffix(string(encodedPayloadFile), ","), ",")
 
 	var shellcode bytes.Buffer
 
-	//Write the decoded payload to disk
+	// Decode the shellcode
 	for _, fileByte := range textData {
 		i, _ := strconv.Atoi(fileByte)
 		shellcode.WriteByte(keyFile[i])
