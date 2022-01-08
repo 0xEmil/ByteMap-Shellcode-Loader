@@ -45,7 +45,7 @@ func EncodePayload(key string, payloadname string, payload string) {
 	}
 
 	payloadFile, err := ioutil.ReadFile(payload)
-	if os.IsNotExist(err) {
+	if len(payloadFile) == 0 {
 		// If not a file, try to load the string as hex payload
 		payloadFile, err = hex.DecodeString(payload)
 		if err != nil {
