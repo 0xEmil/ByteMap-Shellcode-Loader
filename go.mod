@@ -1,4 +1,4 @@
-module github.com/0xEmil/Shellcode-Loader-ByteMap
+module github.com/OpachevskyEmil/ByteMap-Shellcode-Loader/pkg
 
 go 1.16
 

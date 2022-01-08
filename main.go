@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/0xEmil/Shellcode-Loader-ByteMap/pkg"
+	"github.com/OpachevskyEmil/ByteMap-Shellcode-Loader/pkg"
 	"github.com/alecthomas/kong"
 )
 
