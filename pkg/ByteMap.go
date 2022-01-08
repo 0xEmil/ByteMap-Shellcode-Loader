@@ -70,6 +70,7 @@ func EncodePayload(key string, payloadname string, payload string) {
 
 	writer.Flush()
 	file.Close()
+	fmt.Println("[*] Encoded file created!")
 }
 
 func DecodePayload(key string, encodedPayload string) bytes.Buffer {
