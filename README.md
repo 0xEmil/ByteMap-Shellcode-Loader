@@ -1,8 +1,9 @@
 # ByteMap Shellcode Loader
-> Encodes and runs shellcode payloads. Use it to bypass on-disk antivirus scans. Created for a YouTube series.
+> Encodes and runs shellcode payloads. Use it to bypass on-disk antivirus scans. 
+> Created just to illustrate a conscept of a rebulding a file from existing bytes to bypass AV's on-disk scans. Just a stupid idea I had a while ago, nothing fancy.
 
 
-The tool has two functionalities:on
+The tool has two functionalities:
 1. Encodes the shellcode payload using a ByteMap of the file (key file). The key files could be the compiled Golang project itself for ease of use.
 2. Loads the encoded shellcode into memory and runs it on the victim computer.
 
@@ -44,4 +45,4 @@ loader64.exe decode-run ./loader64.exe encodedPayloadFileName.enc
 
 ## Info
 
-Emil Opachevsky – [cyincore](https://twitter.com/cyincore) – emil@Cyincore.com
+Emil Opachevsky – [@OpachevskyEmil](https://twitter.com/OpachevskyEmil) – emil@Cyincore.com
