@@ -45,4 +45,4 @@ loader64.exe decode-run ./loader64.exe encodedPayloadFileName.enc
 
 ## Info
 
-Emil Opachevsky – [@0xEmil](https://twitter.com/0xEmil) – Emil@Cyincore.com
+Emil Opachevsky – [@OpachevskyEmil](https://twitter.com/OpachevskyEmil) – Emil@Cyincore.com
